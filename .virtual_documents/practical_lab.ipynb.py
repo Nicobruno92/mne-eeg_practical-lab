@@ -18,9 +18,9 @@ from mne_bids import BIDSPath, read_raw_bids, print_dir_tree, make_report
 
 
 # direccion de la carpeta donde descargamos el archivo
-# por ejemplo 'nicobruno/documents/EEG/'
+# por ejemplo '/Users/nicobruno/Downloads/practical_lab/'
 # Download one subject's data from each dataset
-bids_root = '/Users/nicobruno/Downloads/practical_lab/'
+bids_root = '/Users/nicobruno/Downloads/practical_lab'
 
 
 print(make_report(bids_root))
@@ -38,7 +38,7 @@ run = '1'
 
 #Subject that we want to use
 # We are going to start with 'sub-AB4'
-subject = 'AB'
+subject = 'AB12'
 
 bids_path = BIDSPath(subject=subject, task=task, run = run,
                      suffix=suffix, datatype=datatype, 
@@ -49,7 +49,6 @@ display(bids_path)
 
 
 # leer el archivo crudo pasando el path que acabamos de crear al archivo
-# pista la funcion a usar deberia llamarse algo como mne.io.read_raw_ext(path, preload = True)
 raw = read_raw_bids(bids_path=bids_path, verbose = False)
 
 
@@ -142,7 +141,36 @@ epochs.plot_drop_log() #plotear que épocas dropeamos y bajo que condiciones
 print(epochs) # ahora deberiamos tener tantas epocas menos como las que dropeamos
 
 
-# convendria guardar aca tal vez
+# NO SE COMO GUARDAR EN BIDS. SI NO SE PPUEDE DE BAJAAA
+
+
+n_components = 0.99  # Should normally be higher, like 0.999get_ipython().getoutput("!")
+method = 'fastica'
+max_iter = 512  # Should normally be higher, like 500 or even 1000get_ipython().getoutput("!")
+fit_params = dict(fastica_it=5)
+random_state = 42
+
+ica = mne.preprocessing.ICA(n_components=n_components,
+                            method=method,
+                            max_iter=max_iter,
+#                             fit_params=fit_params,
+                            random_state=random_state)
+
+ica.fit(epochs)
+
+
+ica.plot_components(inst = epoch,picks=range(10))
+
+
+ica.plot_sources(epochs, block=False, picks =range(10))
+
+
+# epochs interpolated
+epochs_interpolate = epochs.interpolate_bads()
+
+
+# usar average para la referencia de los canales
+epochs_rereferenced, ref_data = mne.set_eeg_reference(inst = epochs_interpolate, ref_channels = 'average', copy = True)
 
 
 
