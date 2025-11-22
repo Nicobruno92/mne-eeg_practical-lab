@@ -127,3 +127,13 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Datalad
+.datalad
+
+ds003690/
+nueva_carpeta/
+ds003690.zip
+
+.history
+.virtual_documents
