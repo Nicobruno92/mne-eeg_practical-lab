@@ -131,9 +131,11 @@ dmypy.json
 # Datalad
 .datalad
 
+ds003690
 ds003690/
 nueva_carpeta/
 ds003690.zip
+ds003690_gonogo.zip
 
 .history
 .virtual_documents
